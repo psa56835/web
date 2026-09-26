@@ -37,3 +37,8 @@
 - 插畫：SDXL-Turbo bf16 CPU（`v2/gen.py`，jobs.json / jobs2.json 是 prompt），`v2/prep.py` 負責去背（isnet-anime，太陽和月餅改用 birefnet）和調色
 - 動畫：`v2/engine.py` 合成引擎、`v2/s1.py` 開場床戲（被子前景遮罩）、`v2/scenes.py` 第 2～6 段，`python3 render.py out.mp4 vo` 輸出
 - 注意：SDXL 和 TTS 同時跑會 OOM（15GB），要排隊跑
+
+## v3（使用者否決 v2 去背拼貼，改程式繪製動畫）
+- 需求以 `PROMPT-v3.md` 為準
+- Voai ConnectAPI（https://connect.voai.ai/docs）需要 x-api-key，沒帶 key 回 401
+  若無 key：使用者從 app.voai.ai 網頁版生成 6 句音檔上傳，我再對時間軸
