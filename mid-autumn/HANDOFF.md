@@ -27,3 +27,13 @@
 - `src/cut/k0-k3.png`：熊寶四個表情去背（乖巧、委屈、開心、好奇）
 - 原設定圖需使用者重新上傳（全身正面去背要重做）
 - v1 成品 `mid-autumn-story.mp4` 使用者評為品質不行，v2 全部重做
+
+## v2 進度（方案 A 已完成初版）
+- 成品：`mid-autumn-story-v2.mp4`（1080x1920、56.3 秒、只有語音）
+- 語音：BreezyVoice-300M（CPU），參考聲音用官方 `data/example.wav` 的前 9 秒，逐子句合成再用 whisper 驗字（`v2/tts/tts2.py`、`v2/tts/shim.py`，torchaudio 新版要用 shim 墊 soundfile）
+  - 要先 clone mtkresearch/BreezyVoice，把 processor.py 的 `set_audio_backend` 註解掉，並裝 `ruamel.yaml<0.18`
+  - 第 1 句用的是完整 17 秒參考音，其餘用 9 秒版，音色可能有一點差異
+  - 待確認：第 3 句「射下」whisper 一直聽成「受下」
+- 插畫：SDXL-Turbo bf16 CPU（`v2/gen.py`，jobs.json / jobs2.json 是 prompt），`v2/prep.py` 負責去背（isnet-anime，太陽和月餅改用 birefnet）和調色
+- 動畫：`v2/engine.py` 合成引擎、`v2/s1.py` 開場床戲（被子前景遮罩）、`v2/scenes.py` 第 2～6 段，`python3 render.py out.mp4 vo` 輸出
+- 注意：SDXL 和 TTS 同時跑會 OOM（15GB），要排隊跑
