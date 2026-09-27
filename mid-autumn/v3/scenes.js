@@ -108,7 +108,8 @@ function scene3(t, d, cue) {
   // 后羿爬山：跳三下到山頂
   const climbEnd = cue.climb ?? d * 0.33;
   const pts = [[200, 1640], [330, 1530], [450, 1420], [540, 1270]];
-  const cp = clamp(t / climbEnd) * 3, ci = Math.min(Math.floor(cp), 2), ck = cp - ci;
+  const climbStart = cue.climbStart ?? 0;
+  const cp = clamp((t - climbStart) / (climbEnd - climbStart)) * 3, ci = Math.min(Math.floor(cp), 2), ck = cp - ci;
   const [ax, ay] = pts[ci], [bx2, by2] = pts[ci + 1];
   const hx = t < climbEnd ? ax + (bx2 - ax) * ck : 540, hy = t < climbEnd ? ay + (by2 - ay) * ck - Math.sin(ck * Math.PI) * 110 : 1270;
   const aiming = t > climbEnd;
