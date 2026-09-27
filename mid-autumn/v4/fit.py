@@ -11,29 +11,36 @@ K = CH / (1920 * 1.12)                 # 畫面 px → 畫布 px
 TARGET_CY = (820 + 1920 * .06) * K     # 角色中心放在畫面 y≈820（安全區置中偏上）
 STYLE = "soft 3d cartoon render, pixar style, warm cinematic light, highly detailed"
 NEG = "text, watermark, deformed, extra head, extra limbs, frame, border, seam"
-seg = new_session('birefnet-general-lite')
+JOBS = json.load(open(sys.argv[1]))
+_seg = new_session('birefnet-general-lite')
+BOX = {}
+for src, out, *_ in JOBS:
+    if not os.path.exists(out):
+        a = np.array(remove(Image.open(src).convert('RGB'), session=_seg).getchannel('A')) > 60
+        ys, xs = np.where(a); BOX[src] = (xs.min(), xs.max(), ys.min(), ys.max())
+del _seg; import gc; gc.collect()
 pipe = None
 
 
 def get_pipe():
     global pipe
     if pipe is None:
-        pipe = StableDiffusionXLInpaintPipeline.from_pretrained('Lykon/dreamshaper-xl-lightning', variant='fp16', torch_dtype=torch.bfloat16)
+        from diffusers import StableDiffusionXLPipeline
+        base = StableDiffusionXLPipeline.from_pretrained('Lykon/dreamshaper-xl-lightning', variant='fp16', torch_dtype=torch.bfloat16)
+        pipe = StableDiffusionXLInpaintPipeline(**base.components)
         pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config, algorithm_type='sde-dpmsolver++', use_karras_sigmas=True)
         pipe.set_progress_bar_config(disable=True)
     return pipe
 
 
-for src, out, prompt, max_h, seed in json.load(open(sys.argv[1])):
+for src, out, prompt, max_h, seed in JOBS:
     if os.path.exists(out):
         continue
     t0 = time.time()
     im = Image.open(src).convert('RGB')
-    a = np.array(remove(im, session=seg).getchannel('A')) > 60
-    ys, xs = np.where(a)
-    bx0, bx1, by0, by1 = xs.min(), xs.max(), ys.min(), ys.max()
+    bx0, bx1, by0, by1 = BOX[src]
     # 縮放：角色高度不超過 max_h（畫面 px），且整張圖至少蓋滿畫布寬
-    s = min(max_h * K / (by1 - by0), 1.25 * CW / im.width)
+    s = min(max_h * K / (by1 - by0), CW / im.width)          # 只縮不放，避免糊
     s = max(s, 0.4 * CW / im.width)
     sw, sh = round(im.width * s), round(im.height * s)
     small = im.resize((sw, sh), Image.LANCZOS)

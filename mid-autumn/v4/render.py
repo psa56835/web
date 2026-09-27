@@ -4,7 +4,7 @@ import os, sys, json, math, re, numpy as np, soundfile as sf
 from PIL import Image, ImageFilter
 from engine import *
 
-PRE, POST, XF = 0.35, 0.55, 0.45        # 語音前後留白、鏡頭溶接秒數
+PRE, POST, XF = 0.25, 0.35, 0.45        # 語音前後留白、鏡頭溶接秒數
 out, vo = sys.argv[1], sys.argv[2]
 FAST = '--fast' in sys.argv
 ONLY = int(sys.argv[sys.argv.index('--only') + 1]) if '--only' in sys.argv else None
