@@ -3,8 +3,7 @@
 import sys, os, json, time, torch
 from diffusers import StableDiffusionXLPipeline, DPMSolverMultistepScheduler
 torch.set_num_threads(4)
-STYLE = ("soft 3d cartoon render, pixar disney animation style, chibi proportions, big glossy brown eyes with highlights, "
-         "rosy cheeks, cozy warm cinematic lighting, subsurface scattering, highly detailed, masterpiece")
+STYLE = ("soft 3d cartoon render, pixar style, chibi, glossy big eyes, warm cinematic light, highly detailed")
 NEG = "2d, flat, anime, sketch, lowres, deformed, extra head, extra limbs, bad hands, text, watermark, scary, realistic photo"
 pipe = StableDiffusionXLPipeline.from_pretrained('Lykon/dreamshaper-xl-lightning', variant='fp16', torch_dtype=torch.bfloat16)
 pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config, algorithm_type='sde-dpmsolver++', use_karras_sigmas=True)
