@@ -2,7 +2,7 @@
 import sys, torch, time
 from diffusers import AutoPipelineForText2Image
 torch.set_num_threads(int(__import__('os').environ.get('NT', '4')))
-STYLE = "cute chibi picture book illustration, soft 3d render, pastel colors, warm light"
+STYLE = "high quality, adorable"
 NEG = "ugly, scary, realistic photo, text, watermark, deformed, extra limbs, dark, horror"
 _pipe = None
 def pipe():
