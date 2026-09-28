@@ -1,0 +1,12 @@
+<html><body style="margin:0;background:#F7DCC1"><svg id=s width=1600 height=900 viewBox="0 0 1600 900"></svg>
+<script src="chars.js"></script><script>
+document.getElementById('s').innerHTML = defs() +
+ houyi({x:200,y:420,sc:1,t:.5,bow:true,draw:.8,armR:-135,armL:-95}) +
+ houyi({x:560,y:420,sc:1,king:true,brow:'angry',mouth:'frown'}) +
+ change({x:900,y:420,sc:1,t:.3,brow:'worry',mouth:'worry'}) +
+ change({x:1250,y:420,sc:.9,t:.3,fly:1,armL:120,armR:-120,mood:'happy'}) +
+ villager({x:200,y:720,sc:.8,hat:true,sweat:true,t:.3,brow:'worry',mouth:'o'}) +
+ villager({x:420,y:720,sc:.8,bun:true,col:'url(#gPink)',mood:'happy',armL:150,armR:-150}) +
+ sun({x:700,y:760,r:90,t:.3,sweat:true}) + sun({x:950,y:760,r:90,t:.3,mood:'happy'}) +
+ rabbit({x:1150,y:790,sc:.8}) + mooncake(1330,780,70) + lantern(1500,760,.6,5) + elixir(1480,500,1,.3);
+</script></body></html>
